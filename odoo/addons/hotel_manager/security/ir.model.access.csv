@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hotel_room_reception,Hotel Room Reception Access,model_hotel_room,hotel_manager.group_reception,1,1,0,0
+access_hotel_services_reception,Hotel Room Services Reception Access,model_hotel_services,hotel_manager.group_reception,1,1,0,0
+access_hotel_reservation_service_line_reception,Hotel Reservation Lines Reception Access,model_hotel_reservation_service_line,hotel_manager.group_reception,1,1,1,1
+access_hotel_reservation_nps_reception,Hotel NPS Reservation Reception Access,model_hotel_reservation_nps,hotel_manager.group_reception,1,1,1,1
+access_hotel_reservation_reception,Hotel Reservation Reception Access,model_hotel_reservation,hotel_manager.group_reception,1,1,1,1
+access_hotel_reservation_guest_reception,Hotel Guests Reception Access,model_hotel_guest,hotel_manager.group_reception,1,1,1,1
+access_hotel_reservation_analysis_reception,Hotel Analysis Reception Access,model_hotel_analysis,hotel_manager.group_reception,0,0,0,0
+access_hotel_reservation_guest_line_reception,Hotel Guest Line Reservation Reception Access,model_hotel_reservation_guest_line,hotel_manager.group_reception,1,1,1,1
+access_hotel_room_manager,Hotel Room Manager Access,model_hotel_room,hotel_manager.group_manager,1,1,1,1
+access_hotel_services_manager,Hotel Services Manager Access,model_hotel_services,hotel_manager.group_manager,1,1,1,1
+access_hotel_reservation_service_line_manager,Hotel Reservation Lines Manager Access,model_hotel_reservation_service_line,hotel_manager.group_manager,1,1,1,1
+access_hotel_reservation_manager,Hotel Reservation Manager Access,model_hotel_reservation,hotel_manager.group_manager,1,1,1,1
+access_hotel_reservation_guest_line_manager,Hotel Guest Line Reservation Manager Access,model_hotel_reservation_guest_line,hotel_manager.group_manager,1,1,1,1
+access_hotel_reservation_guest_manager,Hotel Guests Manager Access,model_hotel_guest,hotel_manager.group_manager,1,1,1,1
+access_hotel_reservation_analysis_manager,Hotel Analysis Manager Access,model_hotel_analysis,hotel_manager.group_manager,1,1,1,1
+access_hotel_reservation_nps_manager,Hotel NPS Reservation Manager Access,model_hotel_reservation_nps,hotel_manager.group_manager,1,1,1,1

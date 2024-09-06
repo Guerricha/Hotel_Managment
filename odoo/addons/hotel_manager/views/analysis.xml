@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>  
+        <record id="hotel_analysis_dashboard_tree" model="ir.ui.view">
+            <field name="name">hotel.analysis.dashboard.tree</field>
+            <field name="model">hotel.analysis</field>
+            <field name="arch" type="xml">
+                <tree string="Hotel Analysis Dashboard">
+                    <field name="date"/>
+                    <field name="revpar"/>
+                    <field name="adr"/>
+                    <field name="occupancy_rate"/>
+                    <field name="trevpar"/>
+                    <field name="repeated_guest_percentage"/>
+                    <field name="total_room_revenue"/>
+                    <field name="loyal_guests" />
+                    <field name="total_other_revenue"/>
+                    <field name="currency_id"/>
+                </tree>
+            </field>
+        </record>
+        <record id="hotel_analysis_dashboard_graph" model="ir.ui.view">
+            <field name="name">hotel.analysis.dashboard.graph</field>
+            <field name="model">hotel.analysis</field>
+            <field name="arch" type="xml">
+                <graph string="Hotel Analysis Dashboard" type="line">
+                    <field name="date" type="row"/>
+                    <field name="revpar" type="measure"/>
+                    <field name="adr" type="measure"/>
+                    <field name="loyal_guests" type="measure"/>
+                    <field name="occupancy_rate" type="measure"/>
+                    <field name="repeated_guest_percentage" type="measure"/>
+                    <field name="trevpar" type="measure"/>
+                    <field name="total_room_revenue" type="measure"/>
+                    <field name="total_other_revenue" type="measure"/>
+                    <field name="currency_id" invisible="1"/>
+                </graph>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_hotel_analysis_dashboard">
+            <field name="name">Hotel Analysis Dashboard</field>
+            <field name="res_model">hotel.analysis</field>
+            <field name="view_mode">graph,pivot,tree</field>  
+            <field name="domain">[]</field>
+            <field name="context">{'period_type': 'monthly'}</field>
+        </record>
+        <menuitem id="menu_hotel_analysis_dashboard"
+          name="Analytics"
+          parent="menu_dashboard_action"
+          action="action_hotel_analysis_dashboard"
+          sequence="20"/> 
+    </data>
+</odoo> 

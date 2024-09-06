@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="module_category_hotel_management" model="ir.module.category">
+            <field name="name">Hotel Management</field>
+            <field name="sequence">10</field>
+            <field name="description">Modules related to hotel management</field>
+        </record>
+        
+        <record id="group_reception" model="res.groups">
+            <field name="name">Reception</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="module_category_hotel_management"/>  
+            <field name="comment">This group has access to reception-related features.</field>
+        </record>
+
+        <record id="group_manager" model="res.groups">
+            <field name="name">Hotel Manager</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="module_category_hotel_management"/>
+            <field name="comment">This group has access to manager-level features.</field>
+        </record>
+    </data>
+</odoo>

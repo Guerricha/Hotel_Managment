@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <!-- Template for the Hotel Dashboard -->
+    <t t-name="hotel_dashboard" owl="1">
+        <!-- Main container for the dashboard, taking full viewport height -->
+        <div class="vh-100 overflow-auto bg-muted">
+            <!-- Row for the main dashboard content -->
+            <div class="row m-3">
+                <!-- Column for the left side of the dashboard -->
+                <div class="col-lg-7">
+                    <!-- Header section with title and new reservation button -->
+                    <div class="row">
+                        <div class="col m-0 p-0">
+                            <div class="shadow-sm border m-2 p-4 bg-white">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <!-- Title of the dashboard -->
+                                    <h1 class="text-primary fw-bold">Hotel Manager</h1> 
+                                    <!-- Button to create a new reservation -->
+                                    <button class="btn btn-primary rounded-pill" t-on-click="onClickNewReservation">
+                                        <span class="fa fa-plus me-2"/> New Reservation
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- KPIs for reservations statistics -->
+                    <div class="row" t-on-click="viewReservations">
+                        <Kpi name="'Reservations'" value="state.reservations.numReservations"/>
+                        <Kpi name="'Check-Ins'" value="state.reservations.checkIns"/> 
+                        <Kpi name="'Check-Outs'" value="state.reservations.checkOuts"/>  
+                        <Kpi name="'Stays'" value="state.reservations.stays"/>
+                    </div>
+                    
+                    <!-- Charts for room status and popular services -->
+                    <div class="row">
+                        <!-- Rooms chart section -->
+                        <div class="col-md-6 m-0 p-0">
+                            <div class="shadow-sm border m-2 p-4 bg-white">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <!-- Section title and navigation button -->
+                                    <h3 class="text-primary fw-bold">Rooms</h3>
+                                    <div class="px-3 py-1 bg-primary cursor-pointer">
+                                        <span class="fa fa-arrow-right text-white" t-on-click="viewRooms"/>
+                                    </div>
+                                </div>
+                                <!-- Chart for room status -->
+                                <ChartRenderer title="'Rooms'" type="'pie'" data="state.roomChartData" />
+                            </div>
+                        </div>
+                        
+                        <!-- Popular services chart section -->
+                        <div class="col-md-6 m-0 p-0">
+                            <div class="shadow-sm border m-2 p-4 bg-white">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <!-- Section title and navigation button -->
+                                    <h3 class="text-primary fw-bold">Popular Services</h3>
+                                    <div class="px-3 py-1 bg-primary cursor-pointer">
+                                        <span class="fa fa-arrow-right text-white" t-on-click="viewServices"/>
+                                    </div>
+                                </div>
+                                <!-- Chart for popular services -->
+                                <ChartRenderer type="'polarArea'" title="'Popular Services'" data="state.servicesChartData"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Column for the right side of the dashboard -->
+                <div class="col-lg-5">
+                    <!-- NPS Score section -->
+                    <div class="row">
+                        <div class="shadow-sm border m-2 p-4 bg-white">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div> 
+                                    <!-- NPS Score icon and title -->
+                                    <span class="fa fa-compass fa-2x me-3 text-primary"/>
+                                    <h1 class="text-primary fw-bold d-inline-block">NPS Score</h1> 
+                                </div>
+                                <!-- Display NPS score with dynamic color based on value -->
+                                <div t-attf-class="h1 fw-bold text-#{state.nps.score &lt; 0 ? 'danger' : state.nps.score &lt; 30 ? 'warning' : 'success'}" style="font-size: 48px">
+                                    <t t-esc="state.nps.score"/>%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- NPS KPI details -->
+                    <div class="row">
+                        <NPSKpi name="'Promoters'" value="state.nps.promotersPercentage" onClick="()=>{}" classes="'border-success'" icon="'smile-o'"/>
+                        <NPSKpi name="'Neutrals'" value="state.nps.neutralsPercentage" onClick="()=>{}" classes="'border-warning'" icon="'meh-o'"/>
+                        <NPSKpi name="'Detractors'" value="state.nps.detractorsPercentage" onClick="()=>{}" classes="'border-danger'" icon="'frown-o'"/>
+                    </div>
+                    
+                    <!-- Analytics KPI details -->
+                    <div class="row" t-on-click="viewAnalytics">
+                        <AnalysisKpi name="'RevPAR'" value="this.state.anaytics.revpar"/>
+                        <AnalysisKpi name="'ADR'" value="this.state.anaytics.adr"/> 
+                        <AnalysisKpi name="'Occupancy Rate'" value="this.state.anaytics.occupancy_rate"/>  
+                        <AnalysisKpi name="'Loyal Guests'" value="this.state.anaytics.loyal_guests"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

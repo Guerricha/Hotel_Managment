@@ -1,0 +1,88 @@
+<odoo>
+    <data>
+        <!-- Define the action for the menu item -->
+        <record id="action_rooms" model="ir.actions.act_window">
+            <field name="name">Rooms</field>
+            <field name="res_model">hotel.room</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="view_room_tree" model="ir.ui.view">
+            <field name="name">room.tree</field>
+            <field name="model">hotel.room</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="room_id"/>
+                    <field name="price" widget="monetary" options="{'currency_field': 'currency_id'}" decoration-bf="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="state" widget="badge"
+                           decoration-warning="state == 'under_maintenance'"
+                           decoration-success="state == 'available'"
+                           decoration-danger="state == 'reserved'"/>
+                    <field name="single_bed"/>
+                    <field name="double_bed"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_rooms_form" model="ir.ui.view">
+            <field name="name">room.form</field>
+            <field name="model">hotel.room</field>
+            <field name="arch" type="xml">
+                <form string="Room">
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="available,reserved"/>
+                        <button name="button_reserve" class="oe_highlight" string="Reserve room"
+                                type="object" help="Mark room as reserved"
+                                invisible="state in 'reserved'"/>
+                        <button name="button_free" class="oe_highlight" string="Free room"
+                                type="object" help="Mark room as available"
+                                invisible="state in 'available'"/>
+                        <button name="button_maintenance" class="oe_highlight" string="Under Maintenance"
+                                type="object" help="Room is under maintenance"
+                                invisible="state in 'under_maintenance'"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="room_id" readonly="1"/>
+                            </h1>
+                            
+                        </div>
+                        <hr/> 
+                        <group>
+                            <h3>
+                                <field name="description"/>
+                            </h3>
+                            <group>
+                                <field name="price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="single_bed"/>
+                                <field name="double_bed"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Reservation History">
+                                <field name="reserv_ids">
+                                    <tree>
+                                        <field name="reserv_id"/>
+                                        <field name="guest_id"/>
+                                        <field name="check_in_date"/>
+                                        <field name="check_out_date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Invoice Informations">
+                                <field name="product_id" required="1" nolabel="0"/>
+                                <field name="property_account_income_id" required="1" nolabel="0"/> 
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Link the menu item to the action -->
+        <menuitem id="menu_rooms_action" name="Rooms" parent="menu_dashboard_action" action="action_rooms"/>
+    </data>
+</odoo>

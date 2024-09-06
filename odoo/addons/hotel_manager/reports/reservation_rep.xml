@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Define the report action -->
+    <record id="report_reservation" model="ir.actions.report">
+        <!-- Name of the report displayed in the Odoo interface -->
+        <field name="name">Reservation Report</field>
+        
+        <!-- The model on which the report is based (hotel.reservation) -->
+        <field name="model">hotel.reservation</field>
+        
+        <!-- Report type; in this case, it's a PDF report generated using QWeb templates -->
+        <field name="report_type">qweb-pdf</field>
+        
+        <!-- Internal name for the report template to be used -->
+        <field name="report_name">hotel_manager.reservation_report</field>
+        
+        <!-- File location of the report template -->
+        <field name="report_file">hotel_manager.reservation_report</field>
+        
+        <!-- Name of the report file when printed, here using the reservation ID -->
+        <field name="print_report_name">str(object.reserv_id)</field>
+        
+        <!-- Binding model for the report, which ties it to the hotel reservation model -->
+        <field name="binding_model_id" ref="hotel_manager.model_hotel_reservation"/>
+        
+        <!-- Type of binding, here it's a report action -->
+        <field name="binding_type">report</field>
+    </record>
+    
+    <!-- Define the QWeb template for the report -->
+    <template id="reservation_report">
+        <!-- Outer container for HTML content -->
+        <t t-call="web.html_container">
+            <!-- Loop through the reservation records passed to the report -->
+            <t t-foreach="docs" t-as="reservation">
+                <!-- External layout that defines the basic structure of the report -->
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!-- Report title -->
+                        <h2>Reservation Report</h2>
+
+                        <!-- Reservation details: reservation ID and check-in date -->
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <strong>Reservation ID:</strong> <span t-field="reservation.reserv_id"/>
+                            </div>
+                            <div class="col-6 text-right">
+                                <strong>Check-in Date:</strong> <span t-field="reservation.check_in_date"/>
+                            </div>
+                        </div>
+
+                        <!-- Guest name and check-out date -->
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>Guest Name:</strong> <span t-field="reservation.guest_id.first_name"/> <span t-field="reservation.guest_id.last_name"/>
+                            </div>
+                            <div class="col-6 text-right">
+                                <strong>Check-out Date:</strong> <span t-field="reservation.check_out_date"/>
+                            </div>
+                        </div>
+
+                        <!-- Room details and price per night -->
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>Room ID:</strong> <span t-field="reservation.room_id"/>
+                            </div>
+                            <div class="col-6 text-right">
+                                <strong>Price per Night:</strong> <span t-field="reservation.room_id.price"/>
+                            </div>
+                        </div>
+
+                        <!-- Guest contact details (phone number and email) -->
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>Phone Number:</strong> <span t-field="reservation.guest_id.number"/>
+                            </div>
+                            <div class="col-6 text-right">
+                                <strong>E-mail:</strong> <span t-field="reservation.guest_id.email"/>
+                            </div>
+                        </div>
+
+                        <!-- Number of nights and total price for the reservation -->
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>Number of Nights:</strong> <span t-field="reservation.nights"/>
+                            </div>
+                            <div class="col-6 text-right">
+                                <strong>Total Price:</strong> <span t-field="reservation.total_price"/>
+                            </div>
+                        </div>
+
+                        <!-- Section for guest details in the reservation -->
+                        <h3 class="mt-4">Guests Details:</h3>
+                        <table class="table table-bordered mt-2">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Age</th>
+                                    <th>NIN</th>
+                                    <th>State</th>
+                                    <th>Country</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Loop through the guest details and display them in rows -->
+                                <t t-foreach="reservation.guest_line_ids" t-as="guest">
+                                    <tr>
+                                        <td><span t-field="guest.first_name"/></td>
+                                        <td><span t-field="guest.last_name"/></td>
+                                        <td><span t-field="guest.age"/></td>
+                                        <td><span t-field="guest.nin"/></td>
+                                        <td><span t-field="guest.country_state"/></td>
+                                        <td><span t-field="guest.country"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- Section for services availed during the stay -->
+                        <h3 class="mt-4">Services Availed:</h3>
+                        <table class="table table-bordered mt-2">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Loop through the services and display them in rows -->
+                                <t t-foreach="reservation.service_line_ids" t-as="service">
+                                    <tr>
+                                        <td><span t-field="service.service_id"/></td>
+                                        <td><span t-field="service.quantity"/></td>
+                                        <td><span t-field="service.price_unit"/></td>
+                                        <td><span t-field="service.total_price"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <!-- Footer showing the total price of all services -->
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="text-right"><strong>Total Price:</strong></td>
+                                    <td><span t-field="reservation.total_price"/></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

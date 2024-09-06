@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="seq_reserv" model="ir.sequence">
+            <field name="name">Reservation Sequence</field>
+            <field name="code">reservation.sequence</field>
+            <field name="prefix">RES</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_room" model="ir.sequence">
+            <field name="name">Room Sequence</field>
+            <field name="code">room.sequence</field>
+            <field name="prefix">ROOM</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

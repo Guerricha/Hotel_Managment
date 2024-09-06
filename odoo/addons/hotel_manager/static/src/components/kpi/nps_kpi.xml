@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">   
+    <t t-name="hotel.nps_kpi" owl="1">
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div t-att-class="'card h-100 shadow-sm rounded-10 border-10 ' + (props.classes or '')">
+                <div class="card-body p-4 d-flex flex-column rounded-10 align-items-center justify-content-center">
+                    <span t-attf-class="h1 fa fa-#{props.icon} fa-3x text-#{props.classes.replace('border-', '')}" aria-label="props.name"/>  
+                    <div class="h4 text-muted mt-2"><span t-esc="props.name"/></div>
+                    <div class="h1 fw-bold text-dark mt-2" style="font-size: 48px"><span t-esc="props.value"/>%</div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

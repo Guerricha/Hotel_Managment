@@ -1,0 +1,221 @@
+<odoo>
+    <data>
+        <!-- Form and tree views for Services -->
+        
+        <!-- Form view for NPS -->
+        <record id="view_reservation_nps_form" model="ir.ui.view">
+            <field name="name">reservation.nps</field>
+            <field name="model">hotel.reservation.nps</field>
+            <field name="arch" type="xml">
+                <form string="NPS">
+                    <header>
+                        <div class="text-center">
+                            <h2>
+                                <strong class="text-primary">On a scale of 0 to 10, how likely are you to recommend our hotel to a friend or family?</strong>
+                            </h2>
+                        </div>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="nps_score"/>
+                            <field name="feedback"/>
+                        </group>               
+                    </sheet>
+                    <footer>
+                        <button string="Submit" type="object" name="action_confirm" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Form view for Services -->
+        <record id="view_hotel_services_form" model="ir.ui.view">
+            <field name="name">services.form</field>
+            <field name="model">hotel.services</field>
+            <field name="arch" type="xml">
+                <form string="Hotel Service">
+                    <sheet>
+                        <group>
+                            <field name="service_id" required="1"/>
+                            <field name="product_id" required="1"/>
+                            <field name="property_account_income_id" required="1"/>
+                            <field name="price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_hotel_services_kanban" model="ir.ui.view">
+            <field name="name">services.kanban</field>
+            <field name="model">hotel.services</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <field name="color"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card h-100" t-att-style="record.color.raw_value and 'background-color:' + record.color.raw_value + ';'">
+                                <div class="oe_kanban_global_click">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <strong>
+                                                <field name="service_id"/>
+                                            </strong>
+                                        </div>
+                                        <div class="col-6 float-end text-end">
+                                            <field name="price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                            <field name="currency_id" invisible="1"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        
+        <!-- Tree view for Reservations -->
+        <record id="view_reservation_tree" model="ir.ui.view">
+            <field name="name">reservation.tree</field>
+            <field name="model">hotel.reservation</field>
+            <field name="arch" type="xml">
+                <tree decoration-muted="state == 'done'"
+                      decoration-danger="(check_in_date == current_date and state == 'draft') or (check_out_date == current_date and state == 'confirm')"
+                      decoration-success="(check_in_date == current_date and state == 'confirm') or (check_out_date == current_date and state == 'done')"> 
+                    <field name="reserv_id"/>
+                    <field name="guest_id" decoration-bf="1"/>
+                    <field name="check_in_date"/>
+                    <field name="check_out_date"/>
+                    <field name="service_ids" widget="many2many_tags"/> 
+                    <field name="room_id" decoration-bf="1"/>
+                    <field name="state" widget="badge"
+                           decoration-muted="state == 'done'"
+                           decoration-info="state == 'draft'"
+                           decoration-success="state == 'confirm'"
+                           decoration-danger="state == 'cancel'"/>
+                    <field name="total_price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="nps_score" widget="badge" 
+                                            decoration-warning="nps_score &gt;= 7 and nps_score &lt; 9" 
+                                            decoration-success="nps_score &gt;= 9" 
+                                            decoration-danger="nps_score &lt; 7"
+                                            invisible="nps_score == -1"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Form view for Reservations -->
+        <record id="view_reservation_form" model="ir.ui.view">
+            <field name="name">reservation.form</field>
+            <field name="model">hotel.reservation</field>
+            <field name="arch" type="xml">
+                <form string="Reservation">
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
+                        <button name="button_confirm" class="oe_highlight" string="Confirm"
+                                type="object" help="Move Reservation to Confirmed state"
+                                invisible="state not in 'draft'"/>
+                        <button name="button_done" class="oe_highlight" string="Mark as Done"
+                                type="object" help="Move Reservation to Done state"
+                                invisible="state not in 'confirm'"/>
+                        <button name="button_draft" class="oe_highlight" string="Reset to Draft"
+                                type="object" help="Reset Reservation to Draft state"
+                                invisible="state not in 'cancel'"/>
+                        <button name="button_cancel" class="oe_highlight" string="Cancel" type="object"
+                                help="Cancel Reservation" invisible="state in 'cancel'"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="reserv_id" readonly="1"/>
+                            </h1>
+                        </div>
+                        <hr/> 
+                        <group>
+                            <group>
+                                <field name="guest_id"/>
+                                <field name="check_in_date"/>
+                                <field name="check_out_date"/> 
+                                <field name="room_id" domain="[('state', '=', 'available')]"/>
+                                <field name="nights"/>
+                            </group>
+                            <group>                                                 
+                                <field name="num_adults"/> 
+                                <field name="num_kids"/>                                           
+                                <field name="service_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>    
+                                <field name="nps_score" widget="badge" 
+                                            decoration-warning="nps_score &gt;= 7 and nps_score &lt; 9" 
+                                            decoration-success="nps_score &gt;= 9" 
+                                            decoration-danger="nps_score &lt; 7"
+                                            invisible="nps_score == -1"/>
+                                <field name="feedback"/>                        
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Services">
+                                <field name="service_line_ids">
+                                    <tree editable="bottom">
+                                        <field name="service_id"/>
+                                        <field name="quantity"/>
+                                        <field name="price_unit" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                        <field name="total_price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="total_price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </page>
+                            <page string="Guests Informations">
+                                <field name="guest_line_ids">
+                                    <tree editable="bottom">
+                                        <field name="guest_id"/>
+                                        <field name="first_name"/>
+                                        <field name="last_name"/>
+                                        <field name="age"/>
+                                        <field name="email"/>
+                                        <field name="number"/>
+                                        <field name="country"/>
+                                        <field name="country_state" domain="[('country_id', '=', country)]"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- Define the action for the menu item -->
+        <record id="action_reservations" model="ir.actions.act_window">
+            <field name="name">Reservations</field>
+            <field name="res_model">hotel.reservation</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <record id="action_services" model="ir.actions.act_window">
+            <field name="name">Services</field>
+            <field name="res_model">hotel.services</field>
+            <field name="view_mode">kanban,form</field>
+        </record>
+        <record id="action_form_reservations" model="ir.actions.act_window">
+            <field name="name">Reservations</field>
+            <field name="res_model">hotel.reservation</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_reservation_form"/>
+            <field name="target">new</field>
+        </record>
+        <record id="action_nps_form" model="ir.actions.act_window">
+            <field name="name">Net Promoter Score</field>
+            <field name="res_model">hotel.reservation</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_reservation_nps_form"/>
+            <field name="target">new</field>
+        </record>
+        <!-- Link the menu item to the action -->
+        <menuitem id="menu_reservations_action" name="Reservations" parent="menu_dashboard_action" action="action_reservations"/>
+        <menuitem id="menu_services_action" name="Services" parent="menu_dashboard_action" action="action_services"/>
+        
+        
+    </data>
+</odoo>

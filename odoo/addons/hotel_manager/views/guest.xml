@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>       
+        <record id="hotel_guest_tree_view" model="ir.ui.view">
+            <field name="name">hotel.guest.tree</field>
+            <field name="model">hotel.guest</field>
+            <field name="arch" type="xml">
+                <tree string="Hotel Guests">
+                    <field name="guest_id"/>
+                    <field name="email"/>
+                    <field name="number"/>
+                    <field name="loyalty_status"/>
+                    <field name="previous_reservations"/>
+                    <field name="average_spend_per_stay" widget="monetary"/>
+                    <field name="annual_stay_frequency"/>
+                </tree>
+            </field>
+        </record>
+        <record id="hotel_guest_form_view" model="ir.ui.view">
+            <field name="name">hotel.guest.form</field>
+            <field name="model">hotel.guest</field>
+            <field name="arch" type="xml">
+                <form string="Hotel Guest">
+                    <sheet>
+                        <group>
+                            <field name="first_name" />
+                            <field name="last_name" />
+                            <field name="email" widget="email" />
+                        </group>
+                        <group>
+                            <field name="number" widget="phone" />
+                            <field name="age" />
+                            <field name="parent_id" invisible="age &gt;= 18" /> 
+                        </group>
+                        <notebook>
+                            <page string="CRM Information">
+                                <group>
+                                    <field name="previous_reservations" />
+                                    <field name="loyalty_status" readonly="1"/>
+                                    <field name="average_spend_per_stay" widget="monetary" options="{'currency_field': 'currency_id'}" />
+                                    <field name="annual_stay_frequency" />
+                                    <field name="clv" widget="monetary" options="{'currency_field': 'currency_id'}" />
+                                </group>
+                            </page>
+                            <page string="Children">
+                                <field name="child_ids">
+                                    <tree editable="bottom">
+                                        <field name="first_name"/>
+                                        <field name="last_name"/>
+                                        <field name="age"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Reservation History">
+                                <field name="reserv_ids" readonly="1">
+                                    <tree>
+                                        <field name="check_in_date" />
+                                        <field name="check_out_date" />
+                                        <field name="total_price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Personal Information">
+                                <group>
+                                    <field name="nin" />
+                                    <field name="country" />
+                                    <field name="country_state" />
+                                </group>
+                            </page>
+
+                            <page string="Health Data">
+                                <group>
+                                    <field name="remaining_healthspan" />
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_hotel_guest">
+            <field name="name">Hotel Guests</field>
+            <field name="res_model">hotel.guest</field>
+            <field name="view_mode">tree,form</field>  
+        </record>
+        <menuitem id="menu_hotel_guest"
+          name="Guests"
+          parent="menu_dashboard_action"
+          action="action_hotel_guest"
+          sequence="20"/> 
+    </data>
+</odoo>
