@@ -11,6 +11,10 @@ This project is a comprehensive hotel management odoo module, developed using Od
 - **Service Analytics**: Analyzes and visualizes popular services used by guests.
 - **Customer Satisfaction & Financial Metrics**: Tracks Net Promoter Score (NPS) with detailed breakdowns of promoters, neutrals, and detractors. In addition to that, it showcase other important CRM metrics and key performance indicators like Revenue Per Available Room (RevPAR), Average Daily Rate (ADR), occupancy rate, and loyal guests.
 
+## Docker Integration
+
+This project is Dockerized for efficient deployment and operation across different devices. It uses Docker to create a consistent environment, ensuring that the application works seamlessly regardless of the host system.
+
 ## Components
 
 - **XML Views**:
